@@ -9,10 +9,10 @@ importers:
   .:
     devDependencies:
       concurrently:
-        specifier: ^8.2.0
+        specifier: ^8.2.2
         version: 8.2.2
       vite:
-        specifier: ^3.2.3
+        specifier: ^3.2.11
         version: 3.2.11
       vite-plugin-rsw:
         specifier: ^2.0.11

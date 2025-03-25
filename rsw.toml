@@ -4,10 +4,16 @@ version = "0.1.0"
 interval = 50
 cli = "pnpm"
 
+[new]
+using = "user"
+dir = "crates/template"
+
 [[crates]]
 root = "crates"
 name = "collision-debug"
+#link = true
 
 [[crates]]
 root = "crates"
 name = "samples"
+#link = true
