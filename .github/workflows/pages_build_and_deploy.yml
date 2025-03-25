@@ -1,0 +1,89 @@
+name: Build and Deploy GitHub pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+
+      - name: cache rust & cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.rustup/toolchains
+            ~/.rustup/update-hashes
+            ~/.rustup/settings.toml
+          key: toolchain-${{ hashFiles('rust-toolchain') }}
+
+      - name: rust setup
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: wasm-pack setup
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'latest'
+
+      - name: install rust dependencies
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: rsw
+
+      - name: pnpm setup
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+
+      - name: node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: get PNPM store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - name: pnpm cache setup
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: install node dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: build crates
+        run: rsw build
+
+      - name: build website
+        run: pnpm build
+
+      - name: optimize Wasm
+        uses: NiklasEi/wasm-opt-action@v2
+        with:
+          file: ./dist/assets/*.wasm
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
