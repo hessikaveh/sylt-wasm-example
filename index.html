@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/teapot.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sylt 2D examples</title>
+</head>
+
+<body>
+  <select id="demo-select">
+    <option value="collision">Collision</option>
+    <option value="samples">Samples</option>
+  </select>
+
+  <script type="module" src="/index.js"></script>
+</body>
+
+<style>
+  body {
+    margin: 0;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  canvas {
+    object-fit: contain;
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  select#demo-select {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    z-index: 100;
+    background-color: white;
+    color: black;
+    border: none;
+    outline: none;
+  }
+</style>
+
+</html>

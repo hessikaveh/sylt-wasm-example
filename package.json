@@ -1,0 +1,14 @@
+{
+  "name": "nannou_template",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "concurrently 'rsw watch' 'vite'",
+    "build": "rsw build && vite build",
+    "rsw": "rsw"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "vite": "^3.2.3",
+    "vite-plugin-rsw": "^2.0.11"
+  }
+}
