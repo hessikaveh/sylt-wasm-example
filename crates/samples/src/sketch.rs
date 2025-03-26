@@ -10,6 +10,8 @@ const ITERATIONS: u32 = 100;
 
 pub struct EguiSettings {
     scale: f32,
+    x_translate: f32,
+    y_translate: f32,
     color: Srgb<u8>,
 }
 
@@ -52,6 +54,8 @@ pub async fn create_model(app: &App) -> Model {
         egui,
         settings: EguiSettings {
             scale: 18.0,
+            x_translate: 0.0,
+            y_translate: 0.0,
             color: WHITE,
         },
         is_first_frame: true,
@@ -455,7 +459,13 @@ pub fn update(_app: &App, _model: &mut Model, _update: Update) {
         }
         // Scale slider
         ui.label("Scale:");
-        ui.add(egui::Slider::new(&mut settings.scale, 0.0..=1000.0));
+        ui.add(egui::Slider::new(&mut settings.scale, 0.0..=100.0));
+
+        ui.label("Translate origin X:");
+        ui.add(egui::Slider::new(&mut settings.x_translate, -100.0..=100.0));
+
+        ui.label("Translate origin Y:");
+        ui.add(egui::Slider::new(&mut settings.y_translate, -100.0..=100.0));
 
         // Random color button
         let clicked = ui.button("Random color").clicked();
@@ -526,6 +536,8 @@ fn key_pressed(_app: &App, model: &mut Model, key: Key) {
 fn view(app: &App, _model: &Model, frame: Frame) {
     let draw = app.draw();
     let draw = draw.scale(_model.settings.scale);
+    let draw = draw.x(_model.settings.x_translate);
+    let draw = draw.y(_model.settings.y_translate);
     let settings = &_model.settings;
     draw.background().color(SLATEGREY);
     for (num, body) in _model.world.iter_bodies().enumerate() {
